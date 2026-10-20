@@ -10,6 +10,8 @@ the notes of the version's GitHub Release.
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-10-20
+
 ### Added
 
 - A "Monica" device: birthdays today, birthdays within 7 days, reminders
@@ -24,3 +26,6 @@ the notes of the version's GitHub Release.
   with the age turned and the reminders of the week.
 - A "Test the connection" button and a connection status that names the
   problem; every text in English, French, German and Spanish.
+
+[Unreleased]: https://github.com/guim31/gladys-monica/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/guim31/gladys-monica/releases/tag/v1.0.0
