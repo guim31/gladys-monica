@@ -30,6 +30,22 @@ Gladys before reporting a problem.
 
 In scope: the code of this repository and the Docker image it publishes.
 
+What the integration handles:
+
+- the **Monica personal access token**, stored by Gladys in the integration
+  configuration (a `secret` field), sent only to the configured Monica address
+  in the `Authorization` header, and never logged. The integration only reads
+  (`GET`); revoke the token in Monica to cut its access;
+- **personal data** read from Monica (contact names, birth dates, reminder
+  titles): kept in memory, sent to Gladys only (device states, scene
+  variables, widget), never written to the logs, at any level;
+- under `/data`, only `monica-state.json`: the configured address, the current
+  day and the keys of the scene events already fired that day (contact and
+  reminder numbers; no name, no date, no token);
+- network: outgoing HTTP(S) requests to the configured Monica address only.
+  With "Accept self-signed certificates" ticked, the certificate of that
+  address is not verified.
+
 Out of scope: Gladys Assistant itself (see its
 [security policy](https://github.com/GladysAssistant/Gladys/security/policy)),
-and the third-party services and devices the integration talks to.
+and Monica itself.

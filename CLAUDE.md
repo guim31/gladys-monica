@@ -31,16 +31,22 @@ pushing.
 ## Architecture
 
 ```
-index.js                          SDK wiring only: handlers registered before connect()
-src/devices/index.js              registry of the device blueprints + dispatch helpers
-src/devices/<type>.js             one device type per file (buildDevice, onPoll, onSetValue...)
+index.js                          SDK wiring only (src/app.js registers the handlers)
+src/app.js                        every SDK handler, registered before connect(); returns the hub
+src/hub.js                        reading timer, device, states, scene events, action and test
+src/devices.js                    the "Monica" device: features, names (4 languages), states
+src/monica/client.js              Monica 4 API client (GET /api/me, /contacts, /reminders, paginated)
+src/monica/http.js                the one HTTP function (node:http/https, self-signed opt-in)
+src/monica/model.js               birthdays, reminders, next occurrences, local day (pure)
 src/scenes.js                     scene action handlers (manifest `scene_actions`)
-src/widgets.js                    dashboard widget handlers (manifest `widgets`)
+src/widgets.js                    dashboard widget handler (manifest `widgets`)
+src/texts.js                      texts sent to Gladys, in the four languages
+src/store.js                      /data/monica-state.json: events already fired today
 src/config.js                     DEFAULT_CONFIG (mirrors the manifest defaults) + normalization
-src/weather.js                    example driver (Open-Meteo)
 gladys-assistant-integration.json manifest: name, config_schema, actions, image...
-docs/en.md, docs/fr.md            user documentation, re-hosted by Gladys (mandatory)
+docs/{en,fr,de,es}.md             user documentation, re-hosted by Gladys (mandatory)
 test/                             node --test, against the SDK's fake Gladys (integration-sdk/testing)
+test/helpers/fakeMonica.js        in-memory Monica 4 serving test/fixtures/monica/real-*.json
 .github/scripts/release.mjs       release helpers (manifest bump, changelog), tested in test/
 ```
 
@@ -70,8 +76,9 @@ test/                             node --test, against the SDK's fake Gladys (in
   `type: "provider"`: 5.1.0). `test/manifest.test.js` ties the manifest to the
   code (defaults, action, scene and widget handlers): change both sides
   together.
-- **User-facing text** is bilingual (English and French): action messages,
-  manifest texts, and `docs/en.md` / `docs/fr.md`, kept in sync.
+- **User-facing text** exists in English, French, German and Spanish: action
+  messages, manifest texts, widget, and `docs/{en,fr,de,es}.md`, kept in sync
+  (`test/i18n.test.js`).
 - **Style.** Prettier formats, ESLint catches mistakes. Comments explain why,
   in English. Tests never touch the network.
 
@@ -233,3 +240,21 @@ long, et sur un « Sie »/« Ihr… » de politesse en allemand. Le store exige 
 - Docs `en`, `fr`, `de`, `es` avec les mêmes sections.
 - Chauffe, ouverture, sécurité : ne rien rendre pilotable « comme un thermostat » ou par un assistant
   vocal quand une erreur serait dangereuse (leçon d'OctoPrint).
+
+## Monica (cette intégration)
+
+- **API Monica 4.x** (`/api`, jeton d'accès personnel Passport en Bearer), vérifiée sur l'image officielle
+  `monica:4` + MariaDB en Docker le 20/10/2026 ; réponses réelles dans `test/fixtures/monica/`. Monica 5
+  (« chandler ») n'a pas d'API : non pris en charge.
+- Pièges vus sur le vrai serveur :
+  - la date de naissance est sous `information.dates.birthdate` dans `/api/contacts`, mais sous
+    `information.birthdate` dans le contact imbriqué d'un rappel : lire les deux ;
+  - `is_year_unknown` : l'année renvoyée est l'année courante (sans valeur) ; `is_age_based` : la date est
+    inventée (1er janvier) : pas d'anniversaire ;
+  - `limit` > 100 est refusé (`error_code` 30) ; 60 requêtes/min par jeton ;
+  - sans `Accept: application/json`, un jeton refusé redirige vers la page de connexion au lieu d'un 401 ;
+  - `/api/reminders/upcoming/{mois}` omet les rappels du jour même (déjà « envoyés ») : l'échéance est
+    calculée localement depuis `initial_date` et la fréquence ;
+  - les rappels d'anniversaire créés par Monica ont `delible: false` : écartés (doublons des anniversaires).
+- Vie privée : aucun nom, titre ni date dans les journaux, à aucun niveau (`test/logs.test.js`).
+- Événements de scène : une fois par jour à l'heure `event_hour`, clés déjà tirées persistées par jour.
