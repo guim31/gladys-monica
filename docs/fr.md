@@ -67,8 +67,8 @@ Ce qui compte comme anniversaire :
 - né un 29 février : fêté le 28 février les années non bissextiles.
 
 Ce qui compte comme rappel : tous les rappels de Monica (une fois, toutes les
-N semaines, mois ou années), sauf les rappels « Wish happy birthday » que
-Monica crée pour chaque anniversaire, déjà comptés comme anniversaires. Un
+N semaines, mois ou années), sauf ceux des contacts décédés ou archivés, et les
+rappels « Wish happy birthday » que Monica crée pour chaque anniversaire, déjà comptés comme anniversaires. Un
 rappel mensuel le 31 tombe le dernier jour des mois plus courts.
 
 ## Tableau de bord
@@ -153,5 +153,5 @@ envoyez avec.
 - Les événements du jour partent une fois par jour, pas à l'heure du rappel
   (un rappel Monica a une date, pas d'heure).
 - La prochaine occurrence d'un rappel est calculée par l'intégration à partir
-  de sa date de départ et de sa fréquence, comme le fait Monica.
+  de sa date de départ et de sa fréquence.
 - Un compte Monica par intégration (celui du jeton).

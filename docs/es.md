@@ -67,8 +67,8 @@ Lo que cuenta como cumpleaños:
 - nacido un 29 de febrero: se celebra el 28 de febrero en un año no bisiesto.
 
 Lo que cuenta como recordatorio: todos los recordatorios de Monica (una vez,
-cada N semanas, meses o años), salvo los recordatorios «Wish happy birthday»
-que Monica crea para cada cumpleaños, ya contados como cumpleaños. Un
+cada N semanas, meses o años), salvo los de contactos fallecidos o archivados y
+los recordatorios «Wish happy birthday» que Monica crea para cada cumpleaños, ya contados como cumpleaños. Un
 recordatorio mensual el día 31 cae el último día de los meses más cortos.
 
 ## Panel
@@ -150,5 +150,5 @@ contienen nombres: piense en quién leerá los mensajes que envíe con ellas.
 - Los eventos del día se envían una vez al día, no a la hora del
   recordatorio (un recordatorio de Monica tiene fecha, no hora).
 - La próxima vez que cae un recordatorio la calcula la integración a partir
-  de su fecha de inicio y su frecuencia, como hace Monica.
+  de su fecha de inicio y su frecuencia.
 - Una cuenta de Monica por integración (la del token).

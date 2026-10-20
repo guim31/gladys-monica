@@ -484,7 +484,7 @@
         "de": "Liest Monica sofort und meldet, was es findet.",
         "es": "Lee Monica ahora e indica lo que encuentra."
       },
-      "timeout_seconds": 60
+      "timeout_seconds": 120
     }
   ],
   "scene_triggers": [
@@ -778,7 +778,7 @@
         "de": "Die Geburtstage von heute und den nächsten 6 Tagen als Satz für eine Nachricht oder Durchsage.",
         "es": "Los cumpleaños de hoy y de los 6 días siguientes, en una frase para un mensaje o un anuncio."
       },
-      "timeout_seconds": 60,
+      "timeout_seconds": 120,
       "outputs": [
         {
           "key": "text",

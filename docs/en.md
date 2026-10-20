@@ -66,8 +66,8 @@ What counts as a birthday:
 - born on 29 February: celebrated on 28 February in a common year.
 
 What counts as a reminder: every reminder of Monica (one time, every N weeks,
-months or years), except the "Wish happy birthday" reminders Monica creates
-for each birthday, already counted as birthdays. A monthly reminder on the
+months or years), except those of contacts who passed away or are archived,
+and the "Wish happy birthday" reminders Monica creates for each birthday, already counted as birthdays. A monthly reminder on the
 31st falls on the last day of shorter months.
 
 ## Dashboard
@@ -144,5 +144,5 @@ messages you send with them.
 - The scene events of the day fire once a day, not at the time of the
   reminder (Monica reminders have a date, not a time).
 - The next occurrence of a reminder is computed by the integration from its
-  start date and frequency, like Monica does.
+  start date and frequency.
 - One Monica account per integration (the one of the token).

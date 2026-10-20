@@ -143,7 +143,8 @@ export function contactName(contact) {
   if (name) {
     return name;
   }
-  // complete_name may carry a "⚰" or a "(nickname)": the bare first word is enough.
+  // Without first nor last name (never in practice: Monica requires a first
+  // name), complete_name, which may carry a "⚰" or a "(nickname)".
   const complete = typeof contact?.complete_name === 'string' ? contact.complete_name.trim() : '';
   return complete || `#${contact?.id ?? '?'}`;
 }
@@ -206,8 +207,12 @@ export function nextBirthday(birthday, today) {
   if (daysBetween(today, date) < 0) {
     date = birthdayIn(birthday, today.year + 1);
   }
+  // Born this year (or a date in the future): the first birthday is next year.
+  if (birthday.year !== null && date.year <= birthday.year) {
+    date = birthdayIn(birthday, birthday.year + 1);
+  }
   const age = birthday.year === null ? null : date.year - birthday.year;
-  return { date, days: daysBetween(today, date), age: age !== null && age >= 0 ? age : null };
+  return { date, days: daysBetween(today, date), age };
 }
 
 // --- Reminders -----------------------------------------------------------------------
@@ -228,7 +233,8 @@ export function parseReminders(reminders) {
     if (!initial || !FREQUENCIES.has(reminder.frequency_type)) {
       continue;
     }
-    if (reminder.contact?.is_dead === true) {
+    // Like the birthdays: not for a dead or archived contact.
+    if (reminder.contact?.is_dead === true || reminder.contact?.is_active === false) {
       continue;
     }
     const every = Number.isInteger(reminder.frequency_number) ? reminder.frequency_number : 1;

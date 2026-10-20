@@ -67,8 +67,8 @@ Was als Geburtstag zählt:
 - am 29. Februar geboren: in einem Gemeinjahr am 28. Februar gefeiert.
 
 Was als Erinnerung zählt: alle Erinnerungen von Monica (einmalig, alle N
-Wochen, Monate oder Jahre), außer den Erinnerungen „Wish happy birthday“, die
-Monica für jeden Geburtstag anlegt und die schon als Geburtstage zählen. Eine
+Wochen, Monate oder Jahre), außer denen verstorbener oder archivierter Kontakte und den
+Erinnerungen „Wish happy birthday“, die Monica für jeden Geburtstag anlegt und die schon als Geburtstage zählen. Eine
 monatliche Erinnerung am 31. fällt auf den letzten Tag kürzerer Monate.
 
 ## Dashboard
@@ -152,5 +152,5 @@ Nachrichten liest.
 - Die Ereignisse des Tages kommen einmal am Tag, nicht zur Uhrzeit der
   Erinnerung (eine Monica-Erinnerung hat ein Datum, keine Uhrzeit).
 - Das nächste Vorkommen einer Erinnerung berechnet die Integration aus
-  Startdatum und Häufigkeit, wie Monica selbst.
+  Startdatum und Häufigkeit.
 - Ein Monica-Konto pro Integration (das des Tokens).

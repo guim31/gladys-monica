@@ -136,10 +136,19 @@ test('an event Gladys refuses is tried again at the next reading', async (t) => 
   };
   await w.gladys.connect();
   await w.app.ready;
-  assert.deepEqual(events(w), ['birthday_today:Alice Martin', 'birthday_today:Bruno']);
+  // The refused ones are skipped, the next ones still sent.
+  assert.deepEqual(events(w), [
+    'birthday_today:Alice Martin',
+    'birthday_today:Bruno',
+    'reminder_today:Anniversaire de mariage',
+    'reminder_today:Appeler Bruno',
+    'reminder_today:Prendre des nouvelles de Chloé',
+  ]);
+  assert.equal(w.hub.nextDelay(), 60_000, 'tried again within a minute');
   refuse = false;
   await w.hub.poll();
   assert.equal(w.fake.sceneEvents.length, 7);
+  assert.equal(w.hub.nextDelay(), HOUR);
 });
 
 test('the timer wakes up at the event hour and at midnight', async (t) => {
@@ -245,6 +254,7 @@ test("read this week's birthdays: a sentence and a count", async (t) => {
     text: 'Aucun anniversaire dans les 7 prochains jours.',
   });
   w.server.online = false;
+  w.clock.advance(10 * 60_000);
   const down = await w.fake.sceneAction('read_week_birthdays', {});
   assert.equal(down.success, false);
   assert.equal(down.error, 'Monica : Monica ne répond pas');
@@ -259,4 +269,36 @@ test('Test the connection reports what it found, or why it failed', async (t) =>
   const ko = await w.fake.action('test_connection', {});
   assert.equal(ko.success, false);
   assert.match(ko.error, /^Connection failed: access token refused/);
+});
+
+test('during an outage the counters still move on at midnight', async (t) => {
+  const w = await world(t);
+  w.server.online = false;
+  w.clock.advance(19 * HOUR); // 02:00 on the 21st
+  await w.hub.poll();
+  assert.equal(w.fake.connectionStatus.connected, false);
+  assert.deepEqual(states(w), { today: 0, week: 2, reminders: 0, days: 3, next: 'Chloé Durand' });
+});
+
+test('the weekly sentence reuses data read minutes ago, in good grammar', async (t) => {
+  const w = await world(t);
+  const before = w.server.requests.length;
+  const ack = await w.fake.sceneAction('read_week_birthdays', {});
+  assert.equal(w.server.requests.length, before, 'no new reading');
+  assert.match(
+    ack.data.outputs.text,
+    /Chloé Durand \(10 years\) on Saturday and Inès on Monday\.$/,
+  );
+});
+
+test('a baby born this year has its first birthday next year', async (t) => {
+  const w = await world(t, { connect: false });
+  const baby = structuredClone(w.server.contact(1));
+  baby.id = 50;
+  baby.first_name = 'Bébé';
+  baby.information.dates.birthdate.date = '2026-10-20T00:00:00Z';
+  w.server.contacts.push(baby);
+  await w.gladys.connect();
+  await w.app.ready;
+  assert.equal(states(w).today, 2);
 });

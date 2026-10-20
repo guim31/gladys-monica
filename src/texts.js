@@ -147,7 +147,15 @@ export const WHEN_TEXT = {
   es: { today: 'hoy', tomorrow: 'mañana', inDays: (n) => `dentro de ${n} días` },
 };
 
-export function when(item, language) {
+// Before a weekday in a sentence: "on Saturday", "samedi", "am Samstag", "el sábado".
+const ON_DAY = { en: 'on ', fr: '', de: 'am ', es: 'el ' };
+
+/**
+ * @param {{ days: number, date: object }} item
+ * @param {string} language
+ * @param {{ sentence?: boolean }} [options] in a sentence, "on Saturday" (a tile says "Saturday")
+ */
+export function when(item, language, { sentence = false } = {}) {
   const texts = WHEN_TEXT[language] ?? WHEN_TEXT.en;
   if (item.days === 0) {
     return texts.today;
@@ -155,7 +163,10 @@ export function when(item, language) {
   if (item.days === 1) {
     return texts.tomorrow;
   }
-  return item.days < 7 ? weekday(item.date, language) : texts.inDays(item.days);
+  if (item.days >= 7) {
+    return texts.inDays(item.days);
+  }
+  return `${sentence ? (ON_DAY[language] ?? '') : ''}${weekday(item.date, language)}`;
 }
 
 export const AGE_TEXT = {

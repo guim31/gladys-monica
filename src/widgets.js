@@ -47,7 +47,7 @@ export const TEXT = {
   },
   birthdays: {
     en: 'Birthdays today',
-    fr: 'Anniversaires',
+    fr: 'Anniversaires du jour',
     de: 'Geburtstage heute',
     es: 'Cumpleaños hoy',
   },

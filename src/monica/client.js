@@ -17,7 +17,10 @@
 // Monica 5 ("chandler") has no such API: the integration targets Monica 4.
 // -----------------------------------------------------------------------------
 
+import { createLogger } from '@gladysassistant/integration-sdk';
 import { httpRequest } from './http.js';
+
+const logger = createLogger({ name: 'monica-client' });
 
 export const ERROR_KINDS = Object.freeze({
   UNREACHABLE: 'unreachable', // no answer: down, wrong address, firewall
@@ -79,7 +82,7 @@ export class MonicaClient {
       response = await this.request(`${this.url}/api${path}`, {
         insecure: this.insecure,
         headers: { authorization: `Bearer ${this.token}` },
-        timeoutMs: 20_000,
+        timeoutMs: 15_000,
       });
     } catch (err) {
       throw networkError(err);
@@ -133,6 +136,10 @@ export class MonicaClient {
       }
       items.push(...answer.data);
       const last = Number(answer.meta?.last_page);
+      if (page === MAX_PAGES && last > MAX_PAGES && !this.truncated) {
+        this.truncated = true;
+        logger.warn(`${path}: ${last} pages, only the first ${MAX_PAGES} are read`);
+      }
       if (!Number.isFinite(last) || page >= last || answer.data.length === 0) {
         break;
       }

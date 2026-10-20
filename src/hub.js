@@ -64,6 +64,8 @@ export const HUB_TIMINGS = {
   heartbeatMs: 12 * 60 * 60_000,
 };
 
+// Data younger than this are used as is by "Read this week's birthdays".
+const FRESH_MS = 5 * 60_000;
 // Names read out by the "Read this week's birthdays" action.
 const MAX_NAMES = 10;
 
@@ -109,6 +111,9 @@ export class MonicaHub {
     this.downSince = null;
     this.readAt = 0;
     this.connectedLogged = false;
+    this.eventsPending = false;
+    // Another account means another device: its transport is sent again.
+    this.transport = null;
   }
 
   // --- Logs ------------------------------------------------------------------
@@ -200,7 +205,7 @@ export class MonicaHub {
 
   /** The interval, shortened to the event hour or local midnight. */
   nextDelay() {
-    if (this.error) {
+    if (this.error || this.eventsPending) {
       return Math.min(this.config.pollIntervalMs, this.timings.retryMs);
     }
     const now = this.now();
@@ -247,6 +252,9 @@ export class MonicaHub {
       this.reminders = parseReminders(reminders);
       this.readAt = now;
       this.recovered(now);
+      logger.debug(
+        `Read ${contacts.length} contact(s), ${this.birthdays.length} birthday(s), ${this.reminders.length} reminder(s)`,
+      );
     } catch (err) {
       if (client !== this.client) {
         return;
@@ -255,8 +263,10 @@ export class MonicaHub {
     }
     if (this.readAt !== 0) {
       await this.publishDevices();
+      // The counters are computed locally: from the cached data during an
+      // outage too, so they move on at midnight (the device shows unreachable).
+      await this.publishStates();
       if (!this.error) {
-        await this.publishStates();
         await this.fireEvents(now);
       }
     }
@@ -423,10 +433,12 @@ export class MonicaHub {
     if (now < localTime(day.date, this.config.eventHour, this.timeZone)) {
       return;
     }
-    const scope = this.config.url;
+    // The Monica account, not the address: http:// → https:// on the same
+    // server does not send the day again.
+    const scope = `account-${this.accountId}`;
     const dayKey = isoDate(day.date);
     if (this.saved.scope !== scope || this.saved.day !== dayKey) {
-      this.saved = { scope, day: dayKey, fired: [] };
+      this.saved = { scope, day: dayKey, fired: [], fresh: true };
     }
     const fired = new Set(this.saved.fired);
     const summary = this.summary(now);
@@ -459,23 +471,28 @@ export class MonicaHub {
         },
       });
     }
-    let changed = false;
+    if (this.saved.fresh) {
+      // A new day or instance: written even if nothing fires.
+      delete this.saved.fresh;
+      this.store.save(this.saved);
+    }
+    this.eventsPending = false;
     for (const { id, key, data } of events) {
       if (fired.has(id)) {
         continue;
       }
       if (!(await this.fire(key, data))) {
-        // Gladys refused (restarting?): this event and the next ones are
-        // tried again at the next reading.
-        break;
+        // Gladys refused (busy, restarting?): tried again within a minute
+        // (nextDelay); the next events are still sent.
+        this.eventsPending = true;
+        continue;
       }
       fired.add(id);
-      changed = true;
-    }
-    if (changed || this.saved.fired.length !== fired.size) {
+      // Saved after each event (writes are coalesced): a crash in the middle
+      // of a burst does not send the first ones again.
       this.saved = { scope, day: dayKey, fired: [...fired] };
+      this.store.save(this.saved);
     }
-    this.store.save(this.saved);
   }
 
   birthdayData(birthday) {
@@ -516,7 +533,11 @@ export class MonicaHub {
     if (!this.client) {
       throw new Error(pick(ACTION_TEXT.notConfigured, this.language));
     }
-    await this.poll();
+    // Data read in the last minutes are used as is: a scene right after a
+    // reading neither waits for Monica nor spends its request quota.
+    if (this.error || this.readAt === 0 || this.now() - this.readAt > FRESH_MS) {
+      await this.poll();
+    }
     if (this.error) {
       throw this.explain(this.error.kind);
     }
@@ -529,7 +550,7 @@ export class MonicaHub {
     }
     const items = week.slice(0, MAX_NAMES).map((birthday) => {
       const years = birthday.age === null ? '' : ` (${age(birthday.age)})`;
-      return `${birthday.name}${years} ${when(birthday, language)}`;
+      return `${birthday.name}${years} ${when(birthday, language, { sentence: true })}`;
     });
     const more = week.length - items.length;
     if (more > 0) {
