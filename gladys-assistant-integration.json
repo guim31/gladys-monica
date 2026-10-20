@@ -1,177 +1,824 @@
 {
   "manifest_version": 1,
   "type": "device",
-  "name": "Demo Devices Template",
+  "name": "Monica",
   "description": {
-    "en": "Starter template showing sensors, a switch, a dimmable light and a smart plug.",
-    "fr": "Template de démarrage : capteurs, interrupteur, lampe variable et prise connectée."
+    "en": "Monica (personal CRM) birthdays and reminders: counters, scene triggers, a widget.",
+    "fr": "Anniversaires et rappels de Monica (CRM personnel) : compteurs, déclencheurs de scène, widget.",
+    "de": "Geburtstage und Erinnerungen aus Monica (persönliches CRM): Zähler, Szenenauslöser, Widget.",
+    "es": "Cumpleaños y recordatorios de Monica (CRM personal): contadores, disparadores de escena, widget."
   },
   "version": "1.0.0",
-  "docker_image": "ghcr.io/gladysassistant/integration-template-js:1.0.0",
+  "docker_image": "ghcr.io/guim31/gladys-monica:1.0.0",
   "gladys_version": ">=5.1.0",
-  "cover_image": "https://raw.githubusercontent.com/GladysAssistant/integration-template-js/master/cover.png",
-  "categories": ["lighting", "security", "environment"],
-  "transports": ["local", "cloud"],
+  "cover_image": "https://raw.githubusercontent.com/guim31/gladys-monica/main/cover.png",
+  "categories": ["services"],
+  "transports": ["local"],
   "config_schema": [
     {
       "key": "intro",
       "type": "section",
-      "label": { "en": "Getting started", "fr": "Pour commencer" },
+      "label": {
+        "en": "Your Monica",
+        "fr": "Votre Monica",
+        "de": "Dein Monica",
+        "es": "Su Monica"
+      },
       "description": {
-        "en": "The demo weather station reads real data from the free Open-Meteo API: pick the coordinates to observe. No account, no API key.",
-        "fr": "La station météo de démonstration lit de vraies données via l'API gratuite Open-Meteo : choisissez les coordonnées à observer. Pas de compte, pas de clé d'API."
+        "en": "A self-hosted Monica 4 (Monica 5 has no API yet). In Monica, create a personal access token: Settings, API, Personal access tokens.",
+        "fr": "Un Monica 4 auto-hébergé (Monica 5 n'a pas encore d'API). Dans Monica, créez un jeton d'accès personnel : Settings, API, Personal access tokens.",
+        "de": "Ein selbst gehostetes Monica 4 (Monica 5 hat noch keine API). Erstelle in Monica ein persönliches Zugriffstoken: Settings, API, Personal access tokens.",
+        "es": "Un Monica 4 autoalojado (Monica 5 aún no tiene API). En Monica, cree un token de acceso personal: Settings, API, Personal access tokens."
       },
       "links": [
         {
-          "url": "https://open-meteo.com/en/docs",
-          "label": { "en": "Open-Meteo documentation", "fr": "Documentation Open-Meteo" }
+          "url": "https://github.com/monicahq/monica/blob/4.x/docs/api/index.md",
+          "label": {
+            "en": "Monica API documentation",
+            "fr": "Documentation de l'API Monica",
+            "de": "Dokumentation der Monica-API",
+            "es": "Documentación de la API de Monica"
+          }
         }
       ]
     },
     {
-      "key": "latitude",
-      "type": "number",
-      "label": { "en": "Latitude", "fr": "Latitude" },
-      "description": {
-        "en": "Latitude used for the demo weather sensor.",
-        "fr": "Latitude utilisée par le capteur météo de démonstration."
+      "key": "url",
+      "type": "string",
+      "label": {
+        "en": "Address",
+        "fr": "Adresse",
+        "de": "Adresse",
+        "es": "Dirección"
       },
-      "placeholder": { "en": "e.g. 48.8566", "fr": "ex. 48.8566" },
+      "description": {
+        "en": "Address of Monica, as in the browser, with https:// for HTTPS and :port if not the default.",
+        "fr": "Adresse de Monica, comme dans le navigateur, avec https:// pour le HTTPS et :port s'il n'est pas standard.",
+        "de": "Adresse von Monica wie im Browser, mit https:// für HTTPS und :Port, falls nicht Standard.",
+        "es": "Dirección de Monica, como en el navegador, con https:// para HTTPS y :puerto si no es el estándar."
+      },
+      "placeholder": {
+        "en": "e.g. http://192.168.1.20:8080",
+        "fr": "ex. http://192.168.1.20:8080",
+        "de": "z. B. http://192.168.1.20:8080",
+        "es": "p. ej. http://192.168.1.20:8080"
+      },
       "required": true,
-      "default": 48.8566,
-      "min": -90,
-      "max": 90
+      "default": ""
     },
     {
-      "key": "longitude",
-      "type": "number",
-      "label": { "en": "Longitude", "fr": "Longitude" },
-      "description": {
-        "en": "Longitude used for the demo weather sensor.",
-        "fr": "Longitude utilisée par le capteur météo de démonstration."
+      "key": "api_token",
+      "type": "secret",
+      "label": {
+        "en": "Personal access token",
+        "fr": "Jeton d'accès personnel",
+        "de": "Persönliches Zugriffstoken",
+        "es": "Token de acceso personal"
       },
-      "placeholder": { "en": "e.g. 2.3522", "fr": "ex. 2.3522" },
-      "required": true,
-      "default": 2.3522,
-      "min": -180,
-      "max": 180
+      "description": {
+        "en": "Created in Monica: Settings, API, Personal access tokens. Read only by the integration.",
+        "fr": "Créé dans Monica : Settings, API, Personal access tokens. L'intégration ne fait que lire.",
+        "de": "Erstellt in Monica: Settings, API, Personal access tokens. Die Integration liest nur.",
+        "es": "Creado en Monica: Settings, API, Personal access tokens. La integración solo lee."
+      },
+      "required": true
     },
     {
-      "key": "unit",
+      "key": "options",
+      "type": "section",
+      "label": {
+        "en": "Options",
+        "fr": "Options",
+        "de": "Optionen",
+        "es": "Opciones"
+      }
+    },
+    {
+      "key": "event_hour",
       "type": "select",
-      "label": { "en": "Temperature unit", "fr": "Unité de température" },
+      "label": {
+        "en": "Time of the scene events",
+        "fr": "Heure des événements de scène",
+        "de": "Uhrzeit der Szenenereignisse",
+        "es": "Hora de los eventos de escena"
+      },
+      "description": {
+        "en": "The birthdays and reminders of the day fire their scene triggers at this time, once a day.",
+        "fr": "Les anniversaires et rappels du jour déclenchent leurs scènes à cette heure, une fois par jour.",
+        "de": "Die Geburtstage und Erinnerungen des Tages lösen ihre Szenen zu dieser Uhrzeit aus, einmal am Tag.",
+        "es": "Los cumpleaños y recordatorios del día activan sus escenas a esta hora, una vez al día."
+      },
       "required": false,
-      "default": "celsius",
+      "default": "8",
       "options": [
-        { "value": "celsius", "label": { "en": "Celsius", "fr": "Celsius" } },
-        { "value": "fahrenheit", "label": { "en": "Fahrenheit", "fr": "Fahrenheit" } }
+        {
+          "value": "0",
+          "label": {
+            "en": "00:00",
+            "fr": "0 h",
+            "de": "00:00 Uhr",
+            "es": "00:00"
+          }
+        },
+        {
+          "value": "1",
+          "label": {
+            "en": "01:00",
+            "fr": "1 h",
+            "de": "01:00 Uhr",
+            "es": "01:00"
+          }
+        },
+        {
+          "value": "2",
+          "label": {
+            "en": "02:00",
+            "fr": "2 h",
+            "de": "02:00 Uhr",
+            "es": "02:00"
+          }
+        },
+        {
+          "value": "3",
+          "label": {
+            "en": "03:00",
+            "fr": "3 h",
+            "de": "03:00 Uhr",
+            "es": "03:00"
+          }
+        },
+        {
+          "value": "4",
+          "label": {
+            "en": "04:00",
+            "fr": "4 h",
+            "de": "04:00 Uhr",
+            "es": "04:00"
+          }
+        },
+        {
+          "value": "5",
+          "label": {
+            "en": "05:00",
+            "fr": "5 h",
+            "de": "05:00 Uhr",
+            "es": "05:00"
+          }
+        },
+        {
+          "value": "6",
+          "label": {
+            "en": "06:00",
+            "fr": "6 h",
+            "de": "06:00 Uhr",
+            "es": "06:00"
+          }
+        },
+        {
+          "value": "7",
+          "label": {
+            "en": "07:00",
+            "fr": "7 h",
+            "de": "07:00 Uhr",
+            "es": "07:00"
+          }
+        },
+        {
+          "value": "8",
+          "label": {
+            "en": "08:00",
+            "fr": "8 h",
+            "de": "08:00 Uhr",
+            "es": "08:00"
+          }
+        },
+        {
+          "value": "9",
+          "label": {
+            "en": "09:00",
+            "fr": "9 h",
+            "de": "09:00 Uhr",
+            "es": "09:00"
+          }
+        },
+        {
+          "value": "10",
+          "label": {
+            "en": "10:00",
+            "fr": "10 h",
+            "de": "10:00 Uhr",
+            "es": "10:00"
+          }
+        },
+        {
+          "value": "11",
+          "label": {
+            "en": "11:00",
+            "fr": "11 h",
+            "de": "11:00 Uhr",
+            "es": "11:00"
+          }
+        },
+        {
+          "value": "12",
+          "label": {
+            "en": "12:00",
+            "fr": "12 h",
+            "de": "12:00 Uhr",
+            "es": "12:00"
+          }
+        },
+        {
+          "value": "13",
+          "label": {
+            "en": "13:00",
+            "fr": "13 h",
+            "de": "13:00 Uhr",
+            "es": "13:00"
+          }
+        },
+        {
+          "value": "14",
+          "label": {
+            "en": "14:00",
+            "fr": "14 h",
+            "de": "14:00 Uhr",
+            "es": "14:00"
+          }
+        },
+        {
+          "value": "15",
+          "label": {
+            "en": "15:00",
+            "fr": "15 h",
+            "de": "15:00 Uhr",
+            "es": "15:00"
+          }
+        },
+        {
+          "value": "16",
+          "label": {
+            "en": "16:00",
+            "fr": "16 h",
+            "de": "16:00 Uhr",
+            "es": "16:00"
+          }
+        },
+        {
+          "value": "17",
+          "label": {
+            "en": "17:00",
+            "fr": "17 h",
+            "de": "17:00 Uhr",
+            "es": "17:00"
+          }
+        },
+        {
+          "value": "18",
+          "label": {
+            "en": "18:00",
+            "fr": "18 h",
+            "de": "18:00 Uhr",
+            "es": "18:00"
+          }
+        },
+        {
+          "value": "19",
+          "label": {
+            "en": "19:00",
+            "fr": "19 h",
+            "de": "19:00 Uhr",
+            "es": "19:00"
+          }
+        },
+        {
+          "value": "20",
+          "label": {
+            "en": "20:00",
+            "fr": "20 h",
+            "de": "20:00 Uhr",
+            "es": "20:00"
+          }
+        },
+        {
+          "value": "21",
+          "label": {
+            "en": "21:00",
+            "fr": "21 h",
+            "de": "21:00 Uhr",
+            "es": "21:00"
+          }
+        },
+        {
+          "value": "22",
+          "label": {
+            "en": "22:00",
+            "fr": "22 h",
+            "de": "22:00 Uhr",
+            "es": "22:00"
+          }
+        },
+        {
+          "value": "23",
+          "label": {
+            "en": "23:00",
+            "fr": "23 h",
+            "de": "23:00 Uhr",
+            "es": "23:00"
+          }
+        }
       ]
     },
     {
-      "key": "poll_frequency",
-      "type": "number",
-      "label": { "en": "Refresh interval (s)", "fr": "Intervalle de rafraîchissement (s)" },
+      "key": "poll_interval",
+      "type": "select",
+      "label": {
+        "en": "Refresh interval",
+        "fr": "Intervalle de rafraîchissement",
+        "de": "Aktualisierungsintervall",
+        "es": "Intervalo de actualización"
+      },
       "description": {
-        "en": "How often sensors are polled, in seconds (one minute minimum).",
-        "fr": "Fréquence d'interrogation des capteurs, en secondes (une minute minimum)."
+        "en": "How often Monica is read. Midnight and the time of the events are always followed on time.",
+        "fr": "Fréquence de lecture de Monica. Minuit et l'heure des événements sont toujours suivis à l'heure.",
+        "de": "Wie oft Monica gelesen wird. Mitternacht und die Uhrzeit der Ereignisse werden immer pünktlich berücksichtigt.",
+        "es": "Con qué frecuencia se lee Monica. La medianoche y la hora de los eventos se siguen siempre a tiempo."
       },
       "required": false,
-      "default": 300,
-      "min": 60,
-      "max": 3600
+      "default": "60",
+      "options": [
+        {
+          "value": "15",
+          "label": {
+            "en": "15 minutes",
+            "fr": "15 minutes",
+            "de": "15 Minuten",
+            "es": "15 minutos"
+          }
+        },
+        {
+          "value": "30",
+          "label": {
+            "en": "30 minutes",
+            "fr": "30 minutes",
+            "de": "30 Minuten",
+            "es": "30 minutos"
+          }
+        },
+        {
+          "value": "60",
+          "label": {
+            "en": "1 hour",
+            "fr": "1 heure",
+            "de": "1 Stunde",
+            "es": "1 hora"
+          }
+        },
+        {
+          "value": "180",
+          "label": {
+            "en": "3 hours",
+            "fr": "3 heures",
+            "de": "3 Stunden",
+            "es": "3 horas"
+          }
+        },
+        {
+          "value": "360",
+          "label": {
+            "en": "6 hours",
+            "fr": "6 heures",
+            "de": "6 Stunden",
+            "es": "6 horas"
+          }
+        }
+      ]
+    },
+    {
+      "key": "allow_self_signed",
+      "type": "boolean",
+      "label": {
+        "en": "Accept self-signed certificates",
+        "fr": "Accepter les certificats auto-signés",
+        "de": "Selbstsignierte Zertifikate akzeptieren",
+        "es": "Aceptar certificados autofirmados"
+      },
+      "description": {
+        "en": "For an https:// address whose certificate is self-signed. Tick only for your own server.",
+        "fr": "Pour une adresse en https:// dont le certificat est auto-signé. À cocher pour votre propre serveur seulement.",
+        "de": "Für eine https://-Adresse mit selbstsigniertem Zertifikat. Nur für deinen eigenen Server aktivieren.",
+        "es": "Para una dirección https:// con certificado autofirmado. Márquelo solo para su propio servidor."
+      },
+      "required": false,
+      "default": false
+    },
+    {
+      "key": "language",
+      "type": "select",
+      "label": {
+        "en": "Language of the feature names",
+        "fr": "Langue des noms de fonctionnalités",
+        "de": "Sprache der Funktionsnamen",
+        "es": "Idioma de los nombres de funciones"
+      },
+      "description": {
+        "en": "Names given to the features when a device is added, and texts sent to scenes.",
+        "fr": "Noms donnés aux fonctionnalités à l'ajout d'un appareil, et textes envoyés aux scènes.",
+        "de": "Namen der Funktionen beim Hinzufügen eines Geräts und an Szenen gesendete Texte.",
+        "es": "Nombres de las funciones al añadir un dispositivo y textos enviados a las escenas."
+      },
+      "required": false,
+      "default": "fr",
+      "options": [
+        {
+          "value": "en",
+          "label": {
+            "en": "English",
+            "fr": "Anglais",
+            "de": "Englisch",
+            "es": "Inglés"
+          }
+        },
+        {
+          "value": "fr",
+          "label": {
+            "en": "French",
+            "fr": "Français",
+            "de": "Französisch",
+            "es": "Francés"
+          }
+        },
+        {
+          "value": "de",
+          "label": {
+            "en": "German",
+            "fr": "Allemand",
+            "de": "Deutsch",
+            "es": "Alemán"
+          }
+        },
+        {
+          "value": "es",
+          "label": {
+            "en": "Spanish",
+            "fr": "Espagnol",
+            "de": "Spanisch",
+            "es": "Español"
+          }
+        }
+      ]
     }
   ],
   "actions": [
     {
-      "key": "test_weather",
-      "label": { "en": "Test the weather provider", "fr": "Tester le fournisseur météo" },
-      "timeout_seconds": 30
-    },
-    {
-      "key": "identify",
-      "label": { "en": "Identify a device", "fr": "Identifier un appareil" },
-      "fields": [
-        {
-          "key": "device",
-          "type": "select",
-          "source": "devices",
-          "label": { "en": "Device", "fr": "Appareil" },
-          "required": true
-        }
-      ]
+      "key": "test_connection",
+      "label": {
+        "en": "Test the connection",
+        "fr": "Tester la connexion",
+        "de": "Verbindung testen",
+        "es": "Probar la conexión"
+      },
+      "description": {
+        "en": "Reads Monica now and reports what it finds.",
+        "fr": "Lit Monica maintenant et indique ce qu'il trouve.",
+        "de": "Liest Monica sofort und meldet, was es findet.",
+        "es": "Lee Monica ahora e indica lo que encuentra."
+      },
+      "timeout_seconds": 60
     }
   ],
   "scene_triggers": [
     {
-      "key": "motion_detected",
-      "label": { "en": "Motion detected", "fr": "Mouvement détecté" },
+      "key": "birthday_today",
+      "label": {
+        "en": "Birthday today (Monica)",
+        "fr": "Anniversaire aujourd'hui (Monica)",
+        "de": "Geburtstag heute (Monica)",
+        "es": "Cumpleaños hoy (Monica)"
+      },
       "description": {
-        "en": "A demo motion sensor saw a person or an animal move.",
-        "fr": "Un détecteur de démonstration a vu bouger une personne ou un animal."
+        "en": "A contact has a birthday today. Fires once, at the time set in the configuration.",
+        "fr": "Un contact fête son anniversaire aujourd'hui. Une fois, à l'heure réglée dans la configuration.",
+        "de": "Ein Kontakt hat heute Geburtstag. Einmal, zur in der Konfiguration eingestellten Uhrzeit.",
+        "es": "Un contacto cumple años hoy. Una vez, a la hora configurada."
       },
       "fields": [
         {
-          "key": "device",
-          "type": "select",
-          "source": "devices",
-          "label": { "en": "Sensor", "fr": "Détecteur" }
-        },
-        {
-          "key": "target",
-          "type": "multi_select",
-          "label": { "en": "What moved", "fr": "Ce qui a bougé" },
-          "options": [
-            { "value": "person", "label": { "en": "Person", "fr": "Personne" } },
-            { "value": "animal", "label": { "en": "Animal", "fr": "Animal" } }
-          ]
+          "key": "name",
+          "type": "string",
+          "label": {
+            "en": "Name (empty: anyone)",
+            "fr": "Nom (vide : tout le monde)",
+            "de": "Name (leer: alle)",
+            "es": "Nombre (vacío: cualquiera)"
+          },
+          "description": {
+            "en": "First and last name exactly as in Monica.",
+            "fr": "Prénom et nom exactement comme dans Monica.",
+            "de": "Vor- und Nachname genau wie in Monica.",
+            "es": "Nombre y apellido exactamente como en Monica."
+          }
         }
       ],
       "variables": [
         {
-          "key": "target",
+          "key": "name",
           "type": "string",
-          "label": { "en": "What moved", "fr": "Ce qui a bougé" }
+          "label": {
+            "en": "Name",
+            "fr": "Nom",
+            "de": "Name",
+            "es": "Nombre"
+          }
+        },
+        {
+          "key": "first_name",
+          "type": "string",
+          "label": {
+            "en": "First name",
+            "fr": "Prénom",
+            "de": "Vorname",
+            "es": "Nombre de pila"
+          }
+        },
+        {
+          "key": "age",
+          "type": "number",
+          "label": {
+            "en": "Age turned (empty if the year is unknown)",
+            "fr": "Âge atteint (vide si l'année est inconnue)",
+            "de": "Erreichtes Alter (leer, wenn das Jahr unbekannt ist)",
+            "es": "Edad cumplida (vacía si se desconoce el año)"
+          }
+        },
+        {
+          "key": "date",
+          "type": "string",
+          "label": {
+            "en": "Birthday date (YYYY-MM-DD)",
+            "fr": "Date de l'anniversaire (AAAA-MM-JJ)",
+            "de": "Datum des Geburtstags (JJJJ-MM-TT)",
+            "es": "Fecha del cumpleaños (AAAA-MM-DD)"
+          }
+        },
+        {
+          "key": "contact_id",
+          "type": "number",
+          "label": {
+            "en": "Monica contact number",
+            "fr": "Numéro du contact Monica",
+            "de": "Nummer des Monica-Kontakts",
+            "es": "Número del contacto de Monica"
+          }
+        }
+      ]
+    },
+    {
+      "key": "birthday_upcoming",
+      "label": {
+        "en": "Birthday in N days (Monica)",
+        "fr": "Anniversaire dans N jours (Monica)",
+        "de": "Geburtstag in N Tagen (Monica)",
+        "es": "Cumpleaños dentro de N días (Monica)"
+      },
+      "description": {
+        "en": "A contact's birthday is N days away (1 to 30). Fires once a day, at the time of the events.",
+        "fr": "L'anniversaire d'un contact est dans N jours (1 à 30). Une fois par jour, à l'heure des événements.",
+        "de": "Der Geburtstag eines Kontakts ist in N Tagen (1 bis 30). Einmal am Tag, zur Uhrzeit der Ereignisse.",
+        "es": "El cumpleaños de un contacto es dentro de N días (1 a 30). Una vez al día, a la hora de los eventos."
+      },
+      "fields": [
+        {
+          "key": "days",
+          "type": "number",
+          "required": true,
+          "label": {
+            "en": "Days before the birthday",
+            "fr": "Jours avant l'anniversaire",
+            "de": "Tage vor dem Geburtstag",
+            "es": "Días antes del cumpleaños"
+          },
+          "description": {
+            "en": "From 1 (the day before) to 30.",
+            "fr": "De 1 (la veille) à 30.",
+            "de": "Von 1 (am Vortag) bis 30.",
+            "es": "De 1 (la víspera) a 30."
+          },
+          "min": 1,
+          "max": 30
+        },
+        {
+          "key": "name",
+          "type": "string",
+          "label": {
+            "en": "Name (empty: anyone)",
+            "fr": "Nom (vide : tout le monde)",
+            "de": "Name (leer: alle)",
+            "es": "Nombre (vacío: cualquiera)"
+          },
+          "description": {
+            "en": "First and last name exactly as in Monica.",
+            "fr": "Prénom et nom exactement comme dans Monica.",
+            "de": "Vor- und Nachname genau wie in Monica.",
+            "es": "Nombre y apellido exactamente como en Monica."
+          }
+        }
+      ],
+      "variables": [
+        {
+          "key": "name",
+          "type": "string",
+          "label": {
+            "en": "Name",
+            "fr": "Nom",
+            "de": "Name",
+            "es": "Nombre"
+          }
+        },
+        {
+          "key": "first_name",
+          "type": "string",
+          "label": {
+            "en": "First name",
+            "fr": "Prénom",
+            "de": "Vorname",
+            "es": "Nombre de pila"
+          }
+        },
+        {
+          "key": "age",
+          "type": "number",
+          "label": {
+            "en": "Age turned (empty if the year is unknown)",
+            "fr": "Âge atteint (vide si l'année est inconnue)",
+            "de": "Erreichtes Alter (leer, wenn das Jahr unbekannt ist)",
+            "es": "Edad cumplida (vacía si se desconoce el año)"
+          }
+        },
+        {
+          "key": "date",
+          "type": "string",
+          "label": {
+            "en": "Birthday date (YYYY-MM-DD)",
+            "fr": "Date de l'anniversaire (AAAA-MM-JJ)",
+            "de": "Datum des Geburtstags (JJJJ-MM-TT)",
+            "es": "Fecha del cumpleaños (AAAA-MM-DD)"
+          }
+        },
+        {
+          "key": "contact_id",
+          "type": "number",
+          "label": {
+            "en": "Monica contact number",
+            "fr": "Numéro du contact Monica",
+            "de": "Nummer des Monica-Kontakts",
+            "es": "Número del contacto de Monica"
+          }
+        },
+        {
+          "key": "days",
+          "type": "number",
+          "label": {
+            "en": "Days left",
+            "fr": "Jours restants",
+            "de": "Verbleibende Tage",
+            "es": "Días restantes"
+          }
+        }
+      ]
+    },
+    {
+      "key": "reminder_today",
+      "label": {
+        "en": "Reminder today (Monica)",
+        "fr": "Rappel du jour (Monica)",
+        "de": "Erinnerung heute (Monica)",
+        "es": "Recordatorio de hoy (Monica)"
+      },
+      "description": {
+        "en": "A Monica reminder falls today (birthday reminders aside). Fires once, at the time of the events.",
+        "fr": "Un rappel Monica tombe aujourd'hui (hors rappels d'anniversaire). Une fois, à l'heure des événements.",
+        "de": "Eine Monica-Erinnerung fällt auf heute (ohne Geburtstagserinnerungen). Einmal, zur Uhrzeit der Ereignisse.",
+        "es": "Un recordatorio de Monica cae hoy (salvo los de cumpleaños). Una vez, a la hora de los eventos."
+      },
+      "fields": [
+        {
+          "key": "title",
+          "type": "string",
+          "label": {
+            "en": "Reminder title (empty: any)",
+            "fr": "Titre du rappel (vide : tous)",
+            "de": "Titel der Erinnerung (leer: beliebig)",
+            "es": "Título del recordatorio (vacío: cualquiera)"
+          },
+          "description": {
+            "en": "The exact title, as in Monica.",
+            "fr": "Le titre exact, comme dans Monica.",
+            "de": "Der genaue Titel wie in Monica.",
+            "es": "El título exacto, como en Monica."
+          }
+        }
+      ],
+      "variables": [
+        {
+          "key": "title",
+          "type": "string",
+          "label": {
+            "en": "Reminder title",
+            "fr": "Titre du rappel",
+            "de": "Titel der Erinnerung",
+            "es": "Título del recordatorio"
+          }
+        },
+        {
+          "key": "contact_name",
+          "type": "string",
+          "label": {
+            "en": "Contact name",
+            "fr": "Nom du contact",
+            "de": "Name des Kontakts",
+            "es": "Nombre del contacto"
+          }
+        },
+        {
+          "key": "reminder_id",
+          "type": "number",
+          "label": {
+            "en": "Monica reminder number",
+            "fr": "Numéro du rappel Monica",
+            "de": "Nummer der Monica-Erinnerung",
+            "es": "Número del recordatorio de Monica"
+          }
+        },
+        {
+          "key": "contact_id",
+          "type": "number",
+          "label": {
+            "en": "Monica contact number",
+            "fr": "Numéro du contact Monica",
+            "de": "Nummer des Monica-Kontakts",
+            "es": "Número del contacto de Monica"
+          }
         }
       ]
     }
   ],
   "scene_actions": [
     {
-      "key": "identify_device",
-      "label": { "en": "Identify a device", "fr": "Identifier un appareil" },
-      "description": {
-        "en": "Make a device signal itself (the demo light blinks).",
-        "fr": "Fait se signaler un appareil (la lampe de démonstration clignote)."
+      "key": "read_week_birthdays",
+      "label": {
+        "en": "Read this week's birthdays (Monica)",
+        "fr": "Lire les anniversaires de la semaine (Monica)",
+        "de": "Geburtstage der Woche lesen (Monica)",
+        "es": "Leer los cumpleaños de la semana (Monica)"
       },
-      "timeout_seconds": 15,
-      "fields": [
-        {
-          "key": "device",
-          "type": "select",
-          "source": "devices",
-          "label": { "en": "Device", "fr": "Appareil" },
-          "required": true
-        }
-      ],
+      "description": {
+        "en": "The birthdays of today and the next 6 days, as a sentence for a message or an announcement.",
+        "fr": "Les anniversaires d'aujourd'hui et des 6 jours suivants, en une phrase pour un message ou une annonce.",
+        "de": "Die Geburtstage von heute und den nächsten 6 Tagen als Satz für eine Nachricht oder Durchsage.",
+        "es": "Los cumpleaños de hoy y de los 6 días siguientes, en una frase para un mensaje o un anuncio."
+      },
+      "timeout_seconds": 60,
       "outputs": [
         {
-          "key": "signalled",
-          "type": "boolean",
-          "label": { "en": "Device signalled", "fr": "Appareil signalé" }
+          "key": "text",
+          "type": "string",
+          "label": {
+            "en": "Sentence",
+            "fr": "Phrase",
+            "de": "Satz",
+            "es": "Frase"
+          }
+        },
+        {
+          "key": "count",
+          "type": "number",
+          "label": {
+            "en": "Number of birthdays",
+            "fr": "Nombre d'anniversaires",
+            "de": "Anzahl der Geburtstage",
+            "es": "Número de cumpleaños"
+          }
         }
       ]
     }
   ],
   "widgets": [
     {
-      "key": "demo_status",
-      "label": { "en": "Demo status", "fr": "État de la démo" },
-      "description": {
-        "en": "Live temperature and plug power, plug connection and observed location.",
-        "fr": "Température et puissance en direct, connexion de la prise, position observée."
+      "key": "upcoming",
+      "label": {
+        "en": "Upcoming birthdays",
+        "fr": "Prochains anniversaires",
+        "de": "Nächste Geburtstage",
+        "es": "Próximos cumpleaños"
       },
-      "icon": "activity",
-      "action_timeout_seconds": 15
+      "description": {
+        "en": "Birthdays and reminders of today, then the next birthdays and reminders of the week.",
+        "fr": "Anniversaires et rappels du jour, puis les prochains anniversaires et les rappels de la semaine.",
+        "de": "Geburtstage und Erinnerungen von heute, dann die nächsten Geburtstage und Erinnerungen der Woche.",
+        "es": "Cumpleaños y recordatorios de hoy, luego los próximos cumpleaños y recordatorios de la semana."
+      },
+      "icon": "gift"
     }
   ]
 }

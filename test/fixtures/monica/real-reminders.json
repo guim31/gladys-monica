@@ -1,0 +1,476 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "uuid": "ef8d9ec0-66d7-4548-ab1c-d2f50c37299d",
+      "object": "reminder",
+      "title": "Wish happy birthday to Alice",
+      "description": null,
+      "frequency_type": "year",
+      "frequency_number": 1,
+      "initial_date": "1990-10-20T00:00:00Z",
+      "delible": false,
+      "account": {
+        "id": 3
+      },
+      "contact": {
+        "id": 1,
+        "uuid": "7e895ea7-e746-4e71-8a7c-5fc52e6d4e6f",
+        "object": "contact",
+        "hash_id": "h:4G7r3K91nkYn2LWe5m",
+        "first_name": "Alice",
+        "last_name": "Martin",
+        "nickname": null,
+        "complete_name": "Alice Martin",
+        "initials": "AM",
+        "gender": "Man",
+        "gender_type": "M",
+        "is_starred": false,
+        "is_partial": false,
+        "is_active": true,
+        "is_dead": false,
+        "is_me": false,
+        "information": {
+          "birthdate": {
+            "is_age_based": false,
+            "is_year_unknown": false,
+            "date": "1990-10-20T00:00:00Z"
+          },
+          "deceased_date": {
+            "is_age_based": null,
+            "is_year_unknown": null,
+            "date": null
+          },
+          "avatar": {
+            "url": "http://192.0.2.30/store/avatars/7e895ea7-e746-4e71-8a7c-5fc52e6d4e6f.jpg?1792479314",
+            "source": "default",
+            "default_avatar_color": "#ff9807"
+          }
+        },
+        "url": "http://192.0.2.30/api/contacts/1",
+        "account": {
+          "id": 3
+        }
+      },
+      "created_at": "2026-10-20T06:55:14Z",
+      "updated_at": "2026-10-20T06:55:28Z"
+    },
+    {
+      "id": 2,
+      "uuid": "db2b1a2d-93a3-43aa-a272-19386c15b4b8",
+      "object": "reminder",
+      "title": "Wish happy birthday to Chloé",
+      "description": null,
+      "frequency_type": "year",
+      "frequency_number": 1,
+      "initial_date": "2016-10-24T00:00:00Z",
+      "delible": false,
+      "account": {
+        "id": 3
+      },
+      "contact": {
+        "id": 3,
+        "uuid": "bf672fa6-380d-4456-92ad-ac60d718ed09",
+        "object": "contact",
+        "hash_id": "h:BJdQP3EozOXejL2x85",
+        "first_name": "Chloé",
+        "last_name": "Durand",
+        "nickname": "Clo",
+        "complete_name": "Chloé Durand (Clo)",
+        "initials": "CD",
+        "gender": "Man",
+        "gender_type": "M",
+        "is_starred": false,
+        "is_partial": false,
+        "is_active": true,
+        "is_dead": false,
+        "is_me": false,
+        "information": {
+          "birthdate": {
+            "is_age_based": false,
+            "is_year_unknown": false,
+            "date": "2016-10-24T00:00:00Z"
+          },
+          "deceased_date": {
+            "is_age_based": null,
+            "is_year_unknown": null,
+            "date": null
+          },
+          "avatar": {
+            "url": "http://192.0.2.30/store/avatars/bf672fa6-380d-4456-92ad-ac60d718ed09.jpg?1792479315",
+            "source": "default",
+            "default_avatar_color": "#e5e5cd"
+          }
+        },
+        "url": "http://192.0.2.30/api/contacts/3",
+        "account": {
+          "id": 3
+        }
+      },
+      "created_at": "2026-10-20T06:55:15Z",
+      "updated_at": "2026-10-20T06:55:28Z"
+    },
+    {
+      "id": 3,
+      "uuid": "5d40a790-8e97-412c-ac62-07a579ca4824",
+      "object": "reminder",
+      "title": "Wish happy birthday to Emma",
+      "description": null,
+      "frequency_type": "year",
+      "frequency_number": 1,
+      "initial_date": "1985-03-15T00:00:00Z",
+      "delible": false,
+      "account": {
+        "id": 3
+      },
+      "contact": {
+        "id": 5,
+        "uuid": "3264637a-d86e-4067-97b7-8e240a3fad07",
+        "object": "contact",
+        "hash_id": "h:9qyA7LJYWZ18mVavMj",
+        "first_name": "Emma",
+        "last_name": null,
+        "nickname": null,
+        "complete_name": "Emma",
+        "initials": "E",
+        "gender": "Man",
+        "gender_type": "M",
+        "is_starred": false,
+        "is_partial": false,
+        "is_active": true,
+        "is_dead": false,
+        "is_me": false,
+        "information": {
+          "birthdate": {
+            "is_age_based": false,
+            "is_year_unknown": false,
+            "date": "1985-03-15T00:00:00Z"
+          },
+          "deceased_date": {
+            "is_age_based": null,
+            "is_year_unknown": null,
+            "date": null
+          },
+          "avatar": {
+            "url": "http://192.0.2.30/store/avatars/3264637a-d86e-4067-97b7-8e240a3fad07.jpg?1792479315",
+            "source": "default",
+            "default_avatar_color": "#fdb660"
+          }
+        },
+        "url": "http://192.0.2.30/api/contacts/5",
+        "account": {
+          "id": 3
+        }
+      },
+      "created_at": "2026-10-20T06:55:15Z",
+      "updated_at": "2026-10-20T06:55:28Z"
+    },
+    {
+      "id": 4,
+      "uuid": "e5ce3b41-604a-4bbf-99c1-84419889da4f",
+      "object": "reminder",
+      "title": "Appeler Bruno",
+      "description": null,
+      "frequency_type": "one_time",
+      "frequency_number": 1,
+      "initial_date": "2026-10-20T00:00:00Z",
+      "delible": true,
+      "account": {
+        "id": 3
+      },
+      "contact": {
+        "id": 2,
+        "uuid": "ed0dd1a6-1819-4612-8a12-a977a2ec9389",
+        "object": "contact",
+        "hash_id": "h:EVQdb8yoKVYj0pG3LZ",
+        "first_name": "Bruno",
+        "last_name": null,
+        "nickname": null,
+        "complete_name": "Bruno",
+        "initials": "B",
+        "gender": "Man",
+        "gender_type": "M",
+        "is_starred": false,
+        "is_partial": false,
+        "is_active": true,
+        "is_dead": false,
+        "is_me": false,
+        "information": {
+          "birthdate": {
+            "is_age_based": false,
+            "is_year_unknown": true,
+            "date": "2026-10-20T00:00:00Z"
+          },
+          "deceased_date": {
+            "is_age_based": null,
+            "is_year_unknown": null,
+            "date": null
+          },
+          "avatar": {
+            "url": "http://192.0.2.30/store/avatars/ed0dd1a6-1819-4612-8a12-a977a2ec9389.jpg?1792479314",
+            "source": "default",
+            "default_avatar_color": "#ff9807"
+          }
+        },
+        "url": "http://192.0.2.30/api/contacts/2",
+        "account": {
+          "id": 3
+        }
+      },
+      "created_at": "2026-10-20T06:55:22Z",
+      "updated_at": "2026-10-20T06:55:22Z"
+    },
+    {
+      "id": 5,
+      "uuid": "04b0b47d-dbd4-40d9-9885-60f6a617565a",
+      "object": "reminder",
+      "title": "Prendre des nouvelles de Chloé",
+      "description": null,
+      "frequency_type": "week",
+      "frequency_number": 1,
+      "initial_date": "2026-10-13T00:00:00Z",
+      "delible": true,
+      "account": {
+        "id": 3
+      },
+      "contact": {
+        "id": 3,
+        "uuid": "bf672fa6-380d-4456-92ad-ac60d718ed09",
+        "object": "contact",
+        "hash_id": "h:BJdQP3EozOXejL2x85",
+        "first_name": "Chloé",
+        "last_name": "Durand",
+        "nickname": "Clo",
+        "complete_name": "Chloé Durand (Clo)",
+        "initials": "CD",
+        "gender": "Man",
+        "gender_type": "M",
+        "is_starred": false,
+        "is_partial": false,
+        "is_active": true,
+        "is_dead": false,
+        "is_me": false,
+        "information": {
+          "birthdate": {
+            "is_age_based": false,
+            "is_year_unknown": false,
+            "date": "2016-10-24T00:00:00Z"
+          },
+          "deceased_date": {
+            "is_age_based": null,
+            "is_year_unknown": null,
+            "date": null
+          },
+          "avatar": {
+            "url": "http://192.0.2.30/store/avatars/bf672fa6-380d-4456-92ad-ac60d718ed09.jpg?1792479315",
+            "source": "default",
+            "default_avatar_color": "#e5e5cd"
+          }
+        },
+        "url": "http://192.0.2.30/api/contacts/3",
+        "account": {
+          "id": 3
+        }
+      },
+      "created_at": "2026-10-20T06:55:22Z",
+      "updated_at": "2026-10-20T06:55:22Z"
+    },
+    {
+      "id": 6,
+      "uuid": "76124139-e3d9-4671-9f78-677f368452bb",
+      "object": "reminder",
+      "title": "Envoyer une carte",
+      "description": null,
+      "frequency_type": "month",
+      "frequency_number": 2,
+      "initial_date": "2026-10-23T00:00:00Z",
+      "delible": true,
+      "account": {
+        "id": 3
+      },
+      "contact": {
+        "id": 5,
+        "uuid": "3264637a-d86e-4067-97b7-8e240a3fad07",
+        "object": "contact",
+        "hash_id": "h:9qyA7LJYWZ18mVavMj",
+        "first_name": "Emma",
+        "last_name": null,
+        "nickname": null,
+        "complete_name": "Emma",
+        "initials": "E",
+        "gender": "Man",
+        "gender_type": "M",
+        "is_starred": false,
+        "is_partial": false,
+        "is_active": true,
+        "is_dead": false,
+        "is_me": false,
+        "information": {
+          "birthdate": {
+            "is_age_based": false,
+            "is_year_unknown": false,
+            "date": "1985-03-15T00:00:00Z"
+          },
+          "deceased_date": {
+            "is_age_based": null,
+            "is_year_unknown": null,
+            "date": null
+          },
+          "avatar": {
+            "url": "http://192.0.2.30/store/avatars/3264637a-d86e-4067-97b7-8e240a3fad07.jpg?1792479315",
+            "source": "default",
+            "default_avatar_color": "#fdb660"
+          }
+        },
+        "url": "http://192.0.2.30/api/contacts/5",
+        "account": {
+          "id": 3
+        }
+      },
+      "created_at": "2026-10-20T06:55:23Z",
+      "updated_at": "2026-10-20T06:55:23Z"
+    },
+    {
+      "id": 7,
+      "uuid": "34f268fe-7b8e-4423-a2d1-614d53fbe723",
+      "object": "reminder",
+      "title": "Rendre le livre",
+      "description": null,
+      "frequency_type": "one_time",
+      "frequency_number": 1,
+      "initial_date": "2026-09-01T00:00:00Z",
+      "delible": true,
+      "account": {
+        "id": 3
+      },
+      "contact": {
+        "id": 4,
+        "uuid": "9d3d72ea-c327-49ba-a844-c151e075bff1",
+        "object": "contact",
+        "hash_id": "h:k4jWnOxXBNXQ9Lw2VJ",
+        "first_name": "David",
+        "last_name": null,
+        "nickname": null,
+        "complete_name": "David",
+        "initials": "D",
+        "gender": "Man",
+        "gender_type": "M",
+        "is_starred": false,
+        "is_partial": false,
+        "is_active": true,
+        "is_dead": false,
+        "is_me": false,
+        "information": {
+          "birthdate": {
+            "is_age_based": true,
+            "is_year_unknown": false,
+            "date": "1986-01-01T00:00:00Z"
+          },
+          "deceased_date": {
+            "is_age_based": null,
+            "is_year_unknown": null,
+            "date": null
+          },
+          "avatar": {
+            "url": "http://192.0.2.30/store/avatars/9d3d72ea-c327-49ba-a844-c151e075bff1.jpg?1792479315",
+            "source": "default",
+            "default_avatar_color": "#709512"
+          }
+        },
+        "url": "http://192.0.2.30/api/contacts/4",
+        "account": {
+          "id": 3
+        }
+      },
+      "created_at": "2026-10-20T06:55:23Z",
+      "updated_at": "2026-10-20T06:55:23Z"
+    },
+    {
+      "id": 8,
+      "uuid": "90e34b83-c8c4-40c1-a050-d66e23cd248d",
+      "object": "reminder",
+      "title": "Anniversaire de mariage",
+      "description": null,
+      "frequency_type": "year",
+      "frequency_number": 1,
+      "initial_date": "2015-10-20T00:00:00Z",
+      "delible": true,
+      "account": {
+        "id": 3
+      },
+      "contact": {
+        "id": 1,
+        "uuid": "7e895ea7-e746-4e71-8a7c-5fc52e6d4e6f",
+        "object": "contact",
+        "hash_id": "h:4G7r3K91nkYn2LWe5m",
+        "first_name": "Alice",
+        "last_name": "Martin",
+        "nickname": null,
+        "complete_name": "Alice Martin",
+        "initials": "AM",
+        "gender": "Man",
+        "gender_type": "M",
+        "is_starred": false,
+        "is_partial": false,
+        "is_active": true,
+        "is_dead": false,
+        "is_me": false,
+        "information": {
+          "birthdate": {
+            "is_age_based": false,
+            "is_year_unknown": false,
+            "date": "1990-10-20T00:00:00Z"
+          },
+          "deceased_date": {
+            "is_age_based": null,
+            "is_year_unknown": null,
+            "date": null
+          },
+          "avatar": {
+            "url": "http://192.0.2.30/store/avatars/7e895ea7-e746-4e71-8a7c-5fc52e6d4e6f.jpg?1792479314",
+            "source": "default",
+            "default_avatar_color": "#ff9807"
+          }
+        },
+        "url": "http://192.0.2.30/api/contacts/1",
+        "account": {
+          "id": 3
+        }
+      },
+      "created_at": "2026-10-20T06:55:23Z",
+      "updated_at": "2026-10-20T06:55:23Z"
+    }
+  ],
+  "links": {
+    "first": "http://192.0.2.30/api/reminders?page=1",
+    "last": "http://192.0.2.30/api/reminders?page=1",
+    "prev": null,
+    "next": null
+  },
+  "meta": {
+    "current_page": 1,
+    "from": 1,
+    "last_page": 1,
+    "links": [
+      {
+        "url": null,
+        "label": "❮ Previous",
+        "active": false
+      },
+      {
+        "url": "http://192.0.2.30/api/reminders?page=1",
+        "label": "1",
+        "active": true
+      },
+      {
+        "url": null,
+        "label": "Next ❯",
+        "active": false
+      }
+    ],
+    "path": "http://192.0.2.30/api/reminders",
+    "per_page": 100,
+    "to": 8,
+    "total": 8
+  }
+}

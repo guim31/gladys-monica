@@ -1,0 +1,27 @@
+{
+  "data": {
+    "id": 3,
+    "uuid": "a260f673-ec01-449c-a98a-86521172e94c",
+    "object": "user",
+    "first_name": "John",
+    "last_name": "Doe",
+    "name": "John Doe",
+    "email": "test@example.org",
+    "me_contact": null,
+    "timezone": "America/Chicago",
+    "currency": {
+      "id": 2,
+      "object": "currency",
+      "iso": "USD",
+      "name": "US Dollar",
+      "symbol": "$"
+    },
+    "locale": "en",
+    "is_policy_compliant": true,
+    "account": {
+      "id": 3
+    },
+    "created_at": "2026-10-20T06:54:45Z",
+    "updated_at": "2026-10-20T06:55:00Z"
+  }
+}
